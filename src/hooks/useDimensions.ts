@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-export default function useDimensions(
-  containerRef: React.RefObject<HTMLElement>,
+export default function useDimensions<T extends HTMLElement>(
+  containerRef: React.RefObject<T | null>,
 ) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const currentRef = containerRef.current;
+    if (!currentRef) return;
 
     function getDimensions() {
       return {
@@ -15,22 +16,15 @@ export default function useDimensions(
       };
     }
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (entry) {
-        setDimensions(getDimensions());
-      }
+    const resizeObserver = new ResizeObserver(() => {
+      setDimensions(getDimensions());
     });
 
-    if (currentRef) {
-      resizeObserver.observe(currentRef);
-      setDimensions(getDimensions());
-    }
+    resizeObserver.observe(currentRef);
+    setDimensions(getDimensions());
 
     return () => {
-      if (currentRef) {
-        resizeObserver.unobserve(currentRef);
-      }
+      resizeObserver.unobserve(currentRef);
       resizeObserver.disconnect();
     };
   }, [containerRef]);

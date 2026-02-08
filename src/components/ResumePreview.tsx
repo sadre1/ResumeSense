@@ -18,9 +18,9 @@ export default function ResumePreview({
   contentRef,
   className,
 }: ResumePreviewProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+const containerRef = useRef<HTMLDivElement>(null);
+const { width } = useDimensions(containerRef);
 
-  const { width } = useDimensions(containerRef);
 
   return (
     <div
