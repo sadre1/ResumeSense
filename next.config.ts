@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
     serverActions:{
       bodySizeLimit: "4mb"
     }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "vtqq1oe11wv7265c.public.blob.vercel-storage.com"
+      }
+    ]
   }
 };
 

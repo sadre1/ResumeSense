@@ -116,11 +116,28 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@media print {
+  #resumePreviewContent {
+    zoom: 1 !important;
+    padding: 0;
+  }
+}
+
+#resumePreviewContent {
+  font-family: Inter;
+}
+
+@page {
+  size: A4;
+  margin: 0.6cm;
 }

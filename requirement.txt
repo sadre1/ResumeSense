@@ -1,2 +1,3 @@
 npm i prisma @prisma/client @vercel/blob openai @t3-oss/env-nextjs date-fns next-themes react-color react-to-print @dnd-kit/core @dnd-kit/sortable @dnd-kit/modifiers strip zustand @clerk/nextjs @clerk/themes --legacy-peer-deps 
 npm i -D @tailwindcss/typography @types/react-color prettier prettier-plugin-tailwindcss eslint-config-prettier --legacy-peer-deps
+percentage-in education and also - cgpa 

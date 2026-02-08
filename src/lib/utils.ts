@@ -50,3 +50,9 @@ export function mapToResumeValues(data: ResumeServerData): ResumeValues {
     summary: data.summary || undefined,
   };
 }
+
+export const MODEL_PRIORITY = [
+  "deepseek/deepseek-chat",
+  "mistralai/mistral-7b-instruct",
+  "openchat/openchat-7b",
+] as const;

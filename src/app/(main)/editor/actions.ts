@@ -1,15 +1,15 @@
-"use server";
 
-// import { canCreateResume, canUseCustomizations } from "@/lib/permissions";
+"use server";
 import prisma from "@/lib/prisma";
-// import { getUserSubscriptionLevel } from "@/lib/subscription";
 import { resumeSchema, ResumeValues } from "@/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { del, put } from "@vercel/blob";
-import path from "path";
+import crypto from "crypto"
+
 
 export async function saveResume(values: ResumeValues) {
   const { id } = values;
+  
 
   console.log("received values", values);
 
@@ -21,18 +21,7 @@ export async function saveResume(values: ResumeValues) {
   if (!userId) {
     throw new Error("User not authenticated");
   }
-
-//   const subscriptionLevel = await getUserSubscriptionLevel(userId);
-
-  if (!id) {
-    const resumeCount = await prisma.resume.count({ where: { userId } });
-
-    // if (!canCreateResume(subscriptionLevel, resumeCount)) {
-    //   throw new Error(
-    //     "Maximum resume count reached for this subscription level",
-    //   );
-    // }
-  }
+  
 
   const existingResume = id
     ? await prisma.resume.findUnique({ where: { id, userId } })
@@ -42,15 +31,7 @@ export async function saveResume(values: ResumeValues) {
     throw new Error("Resume not found");
   }
 
-  const hasCustomizations =
-    (resumeValues.borderStyle &&
-      resumeValues.borderStyle !== existingResume?.borderStyle) ||
-    (resumeValues.colorHex &&
-      resumeValues.colorHex !== existingResume?.colorHex);
 
-  if (hasCustomizations ) {
-    throw new Error("Customizations not allowed for this subscription level");
-  }
 
   let newPhotoUrl: string | undefined | null = undefined;
 
@@ -59,9 +40,24 @@ export async function saveResume(values: ResumeValues) {
       await del(existingResume.photoUrl);
     }
 
-    const blob = await put(`resume_photos/${path.extname(photo.name)}`, photo, {
-      access: "public",
-    });
+    
+  const extension =
+    photo.type === "image/png" ? ".png" :
+    photo.type === "image/jpeg" ? ".jpg" :
+    photo.type === "image/webp" ? ".webp" :
+    "";
+    if (!extension) {
+  throw new Error("Unsupported image type");
+}
+
+  const fileName = `${crypto.randomUUID()}${extension}`;
+
+  const blob = await put(
+    `resume_photos/${fileName}`,
+    photo,
+    { access: "public" }
+  );
+
 
     newPhotoUrl = blob.url;
   } else if (photo === null) {

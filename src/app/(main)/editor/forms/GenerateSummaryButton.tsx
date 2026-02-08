@@ -1,0 +1,57 @@
+import LoadingButton from "@/components/LoadingButton";
+import { toast } from "sonner";
+// import usePremiumModal from "@/hooks/usePremiumModal";
+// import { canUseAITools } from "@/lib/permissions";
+import { ResumeValues } from "@/lib/validation";
+import { WandSparklesIcon } from "lucide-react";
+import { useState } from "react";
+// import { useSubscriptionLevel } from "../../SubscriptionLevelProvider";
+import { generateSummary } from "./actions";
+
+interface GenerateSummaryButtonProps {
+  resumeData: ResumeValues;
+  onSummaryGenerated: (summary: string) => void;
+}
+
+export default function GenerateSummaryButton({
+  resumeData,
+  onSummaryGenerated,
+}: GenerateSummaryButtonProps) {
+//   const subscriptionLevel = useSubscriptionLevel();
+
+//   const premiumModal = usePremiumModal();
+
+  
+
+  const [loading, setLoading] = useState(false);
+
+  async function handleClick() {
+    // if (!canUseAITools(subscriptionLevel)) {
+    //   premiumModal.setOpen(true);
+    //   return;
+    // }
+
+    try {
+      setLoading(true);
+      const aiResponse = await generateSummary(resumeData);
+      onSummaryGenerated(aiResponse);
+    } catch (error) {
+      console.error(error);
+      toast.warning("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <LoadingButton
+      variant="outline"
+      type="button"
+      onClick={handleClick}
+      loading={loading}
+    >
+      <WandSparklesIcon className="size-4" />
+      Generate (AI)
+    </LoadingButton>
+  );
+}

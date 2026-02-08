@@ -35,6 +35,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GripHorizontal } from "lucide-react";
 import { useEffect } from "react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
+import GenerateWorkExperienceButton from "./GenerateWorkExperienceButton";
 // import GenerateWorkExperienceButton from "./GenerateWorkExperienceButton";
 
 export default function WorkExperienceForm({
@@ -180,11 +181,11 @@ function WorkExperienceItem({
         />
       </div>
       <div className="flex justify-center">
-        {/* <GenerateWorkExperienceButton
+        <GenerateWorkExperienceButton
           onWorkExperienceGenerated={(exp) =>
             form.setValue(`workExperiences.${index}`, exp)
           }
-        /> */}
+        />
       </div>
       <FormField
         control={form.control}

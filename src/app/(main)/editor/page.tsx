@@ -21,12 +21,12 @@ export default async function Page({ searchParams }: PageProps) {
     return null;
   }
 
-//   const resumeToEdit = resumeId
-//     ? await prisma.resume.findUnique({
-//         where: { id: resumeId, userId },
-//         include: resumeDataInclude,
-//       })
-//     : null;
+  const resumeToEdit = resumeId
+    ? await prisma.resume.findUnique({
+        where: { id: resumeId, userId },
+        include: resumeDataInclude,
+      })
+    : null;
 
-  return <ResumeEditor resumeToEdit={null} />;
+  return <ResumeEditor resumeToEdit={resumeToEdit} />;
 }
