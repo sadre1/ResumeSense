@@ -1,6 +1,7 @@
 "use client";
 
 import logo from "@/assets/logo.png";
+import Shuffle from "@/components/Shuffle";
 import ThemeToggle from "@/components/ThemeToggle";
 import { UserButton } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -19,13 +20,26 @@ export default function Navbar() {
           <Image
             src={logo}
             alt="Logo"
-            width={35}
-            height={35}
+            width={50}
+            height={50}
             className="rounded-full"
           />
-          <span className="text-xl font-bold tracking-tight">
-            AI Resume Builder
-          </span>
+          <Shuffle
+  text=" Resume Sense"
+  shuffleDirection="up"
+  duration={1}
+  animationMode="evenodd"
+  shuffleTimes={1}
+  ease="power3.out"
+  stagger={0.03}
+  threshold={0.1}
+  triggerOnce={true}
+  triggerOnHover
+  respectReducedMotion={true}
+  loop={false}
+  loopDelay={0}
+  className="font-serif"
+/>
         </Link>
         <div className="flex items-center gap-3">
           <ThemeToggle />
