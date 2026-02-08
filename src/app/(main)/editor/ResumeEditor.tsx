@@ -11,6 +11,7 @@ import Footer from "./Footer";
 import ResumePreviewSection from "./ResumePreviewSection";
 import { steps } from "./steps";
 import useAutoSaveResume from "./useAutoSaveResume";
+import GradientText from "@/components/GradientText";
 
 interface ResumeEditorProps {
   resumeToEdit: ResumeServerData | null;
@@ -43,12 +44,15 @@ export default function ResumeEditor({ resumeToEdit }: ResumeEditorProps) {
 
   return (
     <div className="flex grow flex-col">
-      <header className="space-y-1.5 border-b px-3 py-5 text-center">
-        <h1 className="text-2xl font-bold">Design your resume</h1>
-        <p className="text-sm text-muted-foreground">
-          Follow the steps below to create your resume. Your progress will be
-          saved automatically.
-        </p>
+      <header className="space-y-1 border-b px-3 py-3 text-center">
+        <GradientText
+  colors={["#5227FF","#FF9FFC","#B19EEF"]}
+  animationSpeed={15}
+  showBorder={false}
+  className="custom-class font-bold text-3xl"
+>
+Design your resume Here
+</GradientText>
       </header>
       <main className="relative grow">
         <div className="absolute bottom-0 top-0 flex w-full">

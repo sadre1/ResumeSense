@@ -52,7 +52,7 @@ export default function Home() {
           <Link href="/resumes">Build Your Resume</Link>
         </Button>
          <Button asChild size="lg"  className="mx-auto md:ms-0 rounded-4xl" >
-          <Link href="/resumes">Check Resume Score</Link>
+          <Link href="/analyze">Check Resume Score</Link>
         </Button>
         </div>
 
