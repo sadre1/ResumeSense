@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { chatWithFallback } from "@/lib/ai";
+import { router } from "@/lib/openrouter";
 
 export async function POST(req: Request) {
   try {

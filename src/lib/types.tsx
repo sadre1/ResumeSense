@@ -14,3 +14,27 @@ export const resumeDataInclude = {
 export type ResumeServerData = Prisma.ResumeGetPayload<{
   include: typeof resumeDataInclude;
 }>; 
+
+export type ResumePrefill = {
+  title: string;
+  description: string;
+  jobTitle: string;
+  summary: string;
+
+  skills: string[];
+
+  workExperiences: {
+    position: string;
+    company: string;
+    startYear: string;
+    endYear: string | "Present";
+    description: string;
+  }[];
+
+  educations: {
+    degree: string;
+    school: string;
+    startYear: string;
+    endYear: string;
+  }[];
+};

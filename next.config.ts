@@ -5,8 +5,10 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions:{
       bodySizeLimit: "4mb"
-    }
+    },
+    serverComponentsExternalPackages: ['pdfjs-dist'],
   },
+    cacheComponents: true,
   images: {
     remotePatterns: [
       {

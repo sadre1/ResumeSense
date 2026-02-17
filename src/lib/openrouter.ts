@@ -1,10 +1,13 @@
-import OpenAI from "openai";
 
-export const openrouter = new OpenAI({
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+
+export const router = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
-  baseURL: "https://openrouter.ai/api/v1",
-  defaultHeaders: {
+  headers: {
     "HTTP-Referer": "http://localhost:3000", // required
-    "X-Title": "resume-sense",                 // your app name
+    "X-Title": "resume-sense",               // your app name
   },
 });
+
+
+

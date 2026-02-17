@@ -34,3 +34,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Job Title: Java Developer
+Experience: 2–5 Years
+Location: Remote / Hybrid
+
+Job Description
+
+We are looking for a skilled Java Developer to design, develop, and maintain high-performance, scalable backend applications. The ideal candidate should have strong experience in Java, Spring ecosystem, REST APIs, and database technologies.
+
+Responsibilities
+
+Design, develop, test, and maintain Java-based applications
+
+Build RESTful APIs using Spring Boot
+
+Work with Hibernate / JPA for database interaction
+
+Write clean, efficient, and reusable code
+
+Collaborate with frontend developers and product teams
+
+Perform unit and integration testing
+
+Debug and optimize application performance
+
+Participate in code reviews and Agile ceremonies
+
+Required Skills

@@ -1,22 +1,21 @@
-import { openrouter } from "./openrouter";
+import { router } from "./openrouter";
 import { MODEL_PRIORITY } from "./utils";
 import { withTimeout } from "./timeout";
+import { generateText } from "ai";
 
 type ChatMessage = {
   role: "system" | "user" | "assistant";
   content: string;
 };
 
-export async function chatWithFallback(
-  messages: ChatMessage[]
-) {
+export async function chatWithFallback(messages: ChatMessage[]) {
   let lastError: unknown = null;
 
   for (const model of MODEL_PRIORITY) {
     try {
-    const completion = await withTimeout(
-        openrouter.chat.completions.create({
-          model,
+      const completion = await withTimeout(
+        generateText({
+          model: router(model),
           messages,
           temperature: 0.3,
         }),
@@ -25,10 +24,10 @@ export async function chatWithFallback(
 
       return {
         model,
-        content: completion.choices[0].message.content,
+        content: completion.text,
       };
     } catch (err) {
-      console.warn(`Model failed: ${model}`);
+      console.warn(`Model failed: ${model}`, err);
       lastError = err;
     }
   }

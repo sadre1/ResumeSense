@@ -39,6 +39,8 @@ model Resume {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  analyses Analysis[]
+
 
   @@map("resumes")
 }
@@ -91,4 +93,27 @@ model UserSubscription {
   updatedAt DateTime @updatedAt
 
   @@map("user_subscriptions")
+
+  
 }
+model Analysis {
+  id String @id @default(cuid())
+
+  userId String
+  resumeId String?
+
+  resume   Resume? @relation(fields: [resumeId], references: [id], onDelete: SetNull)
+
+  resumeText  String
+  jobDescText String
+
+  atsScore Int
+  insights Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("analyses")
+}
+

@@ -115,3 +115,22 @@ export const generateSummarySchema = z.object({
 });
 
 export type GenerateSummaryInput = z.infer<typeof generateSummarySchema>;
+// =============================
+// ATS Resume Analysis Schema
+// =============================
+
+export const resumeAnalysisSchema = z.object({
+  atsScore: z.number().min(0).max(100),
+
+  missingSkills: z.array(z.string()),
+
+  strengths: z.array(z.string()),
+
+  improvements: z.object({
+    summary: z.array(z.string()),
+    experience: z.array(z.string()),
+    skills: z.array(z.string()),
+  }),
+});
+
+export type ResumeAnalysis = z.infer<typeof resumeAnalysisSchema>;
