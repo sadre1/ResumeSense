@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
     },
     serverComponentsExternalPackages: ['pdfjs-dist'],
   },
-    cacheComponents: true,
   images: {
     remotePatterns: [
       {

@@ -55,7 +55,7 @@ Rules:
     temperature: 0.2
   });
 
-  const text = await result.text();
+  const text =await (result as any).text();
 
   return new Response(text, {
     headers: { "Content-Type": "application/json" }

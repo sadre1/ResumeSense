@@ -2,24 +2,25 @@ import { UIMessage, convertToModelMessages, streamText } from "ai";
 import { router } from "@/lib/openrouter";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
-import { resumeDataInclude } from "@/lib/types";
+
+
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
- const { userId } = await auth();
- if (!userId) {
-  return new Response("Unauthorized", { status: 401 });
-}
+    const { messages }: { messages: UIMessage[] } = await req.json();
+    const { userId } = await auth();
+    if (!userId) {
+        return new Response("Unauthorized", { status: 401 });
+    }
 
-  // Get last user message metadata
-  const lastMessage = messages[messages.length - 1];
-  const route = lastMessage?.metadata?.route;
-  const createMode = lastMessage?.metadata?.createMode;
+    // Get last user message metadata
+    const lastMessage = messages[messages.length - 1];
+    const route = (lastMessage?.metadata as any)?.route;
+    const createMode = (lastMessage?.metadata as any)?.createMode;
 
-  let systemPrompt = "";
-  console.log("Route from message metadata:", route);
-if (route === "/resumes" && createMode === true) {
-  systemPrompt = `
+    let systemPrompt = "";
+    console.log("Route from message metadata:", route);
+    if (route === "/resumes" && createMode === true) {
+        systemPrompt = `
 You are a Resume Builder Assistant.
 
 Ask the user step-by-step for:
@@ -31,12 +32,12 @@ Ask the user step-by-step for:
 DO NOT generate the resume yet.
 Only ask questions and acknowledge answers.
 `;
-}
+    }
 
 
 
-  else if (route === "/resumes") {
-    systemPrompt = `
+    else if (route === "/resumes") {
+        systemPrompt = `
 You are a dedicated Resume Builder Assistant.
 
 You ONLY help users with resume-related tasks.
@@ -53,28 +54,28 @@ Do NOT mention anything outside resume building.
 Do NOT offer help with coding, science, jokes, or unrelated topics.
 Always keep responses focused on resume creation and improvement.
 `;
-  }
+    }
 
-  if (route === "/analyze") {
-    // ✅ Fetch resumes ONLY for analyzer route
-  const [resumes] = await Promise.all([
-    prisma.resume.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        updatedAt: "desc",
-      },
-      include: {
-        workExperiences: true,
-        educations: true,
-      },
-    })
-  ]);
-const resumeDataText = resumes.length
-  ? resumes
-      .map((resume, index) => {
-        return `
+    if (route === "/analyze") {
+        // ✅ Fetch resumes ONLY for analyzer route
+        const [resumes] = await Promise.all([
+            prisma.resume.findMany({
+                where: {
+                    userId,
+                },
+                orderBy: {
+                    updatedAt: "desc",
+                },
+                include: {
+                    workExperiences: true,
+                    educations: true,
+                },
+            })
+        ]);
+        const resumeDataText = resumes.length
+            ? resumes
+                .map((resume, index) => {
+                    return `
 ==============================
 Resume ${index + 1}
 ==============================
@@ -93,46 +94,42 @@ Skills:
 ${resume.skills.length ? resume.skills.map(s => `- ${s}`).join("\n") : "N/A"}
 
 Work Experience:
-${
-  resume.workExperiences.length
-    ? resume.workExperiences
-        .map(
-          (exp) => `
+${resume.workExperiences.length
+                            ? resume.workExperiences
+                                .map(
+                                    (exp) => `
 - Position: ${exp.position ?? "N/A"}
   Company: ${exp.company ?? "N/A"}
-  Duration: ${exp.startDate?.toDateString() ?? "N/A"} – ${
-            exp.endDate?.toDateString() ?? "Present"
-          }
+  Duration: ${exp.startDate?.toDateString() ?? "N/A"} – ${exp.endDate?.toDateString() ?? "Present"
+                                        }
   Description:
   ${exp.description ?? "N/A"}
 `
-        )
-        .join("\n")
-    : "N/A"
-}
+                                )
+                                .join("\n")
+                            : "N/A"
+                        }
 
 Education:
-${
-  resume.educations.length
-    ? resume.educations
-        .map(
-          (edu) => `
+${resume.educations.length
+                            ? resume.educations
+                                .map(
+                                    (edu) => `
 - Degree: ${edu.degree ?? "N/A"}
   School: ${edu.school ?? "N/A"}
-  Duration: ${edu.startDate?.toDateString() ?? "N/A"} – ${
-            edu.endDate?.toDateString() ?? "N/A"
-          }
+  Duration: ${edu.startDate?.toDateString() ?? "N/A"} – ${edu.endDate?.toDateString() ?? "N/A"
+                                        }
 `
-        )
-        .join("\n")
-    : "N/A"
-}
+                                )
+                                .join("\n")
+                            : "N/A"
+                        }
 `;
-      })
-      .join("\n\n")
-  : "No resumes found.";
+                })
+                .join("\n\n")
+            : "No resumes found.";
 
-    systemPrompt = `
+        systemPrompt = `
 You are a resume analysis assistant.
 You ONLY help with:
 - Resume comparison
@@ -143,22 +140,22 @@ You ONLY help with:
 You MUST ask the user to select a resume before analyzing.
 ${resumeDataText}
 `;
-  }
+    }
 
-  const modelMessages = await convertToModelMessages(messages);
-  console.log("Received messages:", systemPrompt);
+    const modelMessages = await convertToModelMessages(messages);
+    console.log("Received messages:", systemPrompt);
 
-  const result = await streamText({
-    model: router("openai/gpt-oss-120b"),
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      ...modelMessages,
-    ],
-    temperature: 0.3,
-  });
-  
-  return result.toUIMessageStreamResponse();
+    const result = await streamText({
+        model: router("openai/gpt-oss-120b"),
+        messages: [
+            {
+                role: "system",
+                content: systemPrompt,
+            },
+            ...modelMessages,
+        ],
+        temperature: 0.3,
+    });
+
+    return result.toUIMessageStreamResponse();
 }
